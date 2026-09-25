@@ -1,5 +1,10 @@
 pipeline{
     agent any
+
+    triggers {
+        pollSCM('* * * * *')
+    }
+
     environment{
         RESTART_NEEDED = 'false'
         CONF_FILENAME = 'postgresql.conf'
