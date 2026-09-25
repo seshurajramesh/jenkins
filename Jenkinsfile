@@ -65,6 +65,7 @@ EOF
             }
 
             stage('restart postgres if needed'){
+                echo "Restart needed: ${env.RESTART_NEEDED}"
                 when{
                     expression { env.RESTART_NEEDED == 'true' }
                 }
