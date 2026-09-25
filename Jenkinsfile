@@ -65,10 +65,11 @@ EOF
             }
 
             stage('restart postgres if needed'){
-                
+                when{
+                    environment name: 'RESTART_NEEDED', value: 'true'
+                }
                 steps{
                     sshagent([params.DB_CREDENTIALS_ID]) {
-                        echo "Restart needed: ${env.RESTART_NEEDED}"
                         sh """
                             set -e
                             ssh -o StrictHostKeyChecking=no ${params.PG_SERVICE}@${params.DB_HOST} "systemctl status postgresql"
