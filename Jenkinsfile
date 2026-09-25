@@ -63,6 +63,23 @@ EOF
                     }
             }
 
+
+            stage('approval & restart postgres if required'){
+                when {
+                    expression { env.RESTART_NEEDED == 'true' }
+                }
+                steps{
+                    try {
+                        timeout(time: 2, unit: 'MINUTES') {
+                    input message: "Restart is needed for the following settings on ${params.DB_HOST}. Do you want to proceed with the restart?", ok: 'Yes, restart'
+                    }
+                    } catch (err) {
+                        echo "Restart approval timed out or was aborted. Skipping restart."
+                        env.RESTART_NEEDED = 'aborted'
+                    }
+                }   
+            }
+
             stage('restart postgres if needed'){
                 when {
                     expression { env.RESTART_NEEDED == 'true' }
