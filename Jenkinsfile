@@ -11,8 +11,7 @@ pipeline{
                 checkout scm
             }
         }
-        stages{
-            stage('move the conf file to server'){
+        stage('move the conf file to server'){
                 steps{
                     sshagent([params.DB_CREDENTIALS_ID]) {
                         sh """
@@ -23,5 +22,4 @@ pipeline{
                 }
             }
         }
-    }
 }
