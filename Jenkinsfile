@@ -71,7 +71,7 @@ EOF
                     sshagent([params.DB_CREDENTIALS_ID]) {
                         sh """
                             set -e
-                            ssh -o StrictHostKeyChecking=no ${params.PG_SERVICE}@${params.DB_HOST} "systemctl restart postgresql"
+                            ssh -o StrictHostKeyChecking=no ${params.PG_SERVICE}@${params.DB_HOST} "sudo systemctl restart postgresql"
                             echo "Postgres service ${params.PG_SERVICE} restarted on ${params.DB_HOST}"
                         """
                     }
