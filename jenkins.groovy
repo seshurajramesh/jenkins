@@ -6,16 +6,15 @@ pipeline{
     }
 
     stages{
-        steps('check git repo'){
-            checkout scm
-        }
-    }
-
-    stages{
-        steps('list git'){
-            sh {
-                ls -la
+        stage('check git repo'){
+            steps{
+                checkout scm
             }
         }
+        stage('list the git repo'){
+            steps{
+                sh 'ls -ltr'
+            }
+        }
+
     }
-}
