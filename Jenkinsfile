@@ -6,7 +6,6 @@ pipeline{
     }
 
     environment{
-        RESTART_NEEDED = 'false'
         CONF_FILENAME = 'postgresql.conf'
     }
 
@@ -51,10 +50,10 @@ EOF
                     sshagent([params.DB_CREDENTIALS_ID]) {
                         script {
                             def restartNeeded = sh(script: """ssh -o StrictHostKeyChecking=no ${params.PG_SERVICE}@${params.DB_HOST} \
-                            'psql -t -A -c "select name from pg_settings where pending_restart = true;" | wc -l'""",returnStdout: true).trim()
-                            if (restartNeeded.toInteger() > 0) {
+                            'psql -t -A -c "select name from pg_settings where pending_restart = true;"'""",returnStdout: true).trim()
+                            if (restartNeeded) {
                                 env.RESTART_NEEDED = 'true'
-                                echo "Restart is needed on ${params.DB_HOST}"
+                                echo "Restart is needed for the following settings on ${params.DB_HOST}: ${restartNeeded}"
                             } else {
                                 env.RESTART_NEEDED = 'false'
                                 echo "Restart is not needed on ${params.DB_HOST}"
@@ -65,8 +64,8 @@ EOF
             }
 
             stage('restart postgres if needed'){
-                when{
-                    environment name: 'RESTART_NEEDED', value: 'true'
+                when {
+                    expression { env.RESTART_NEEDED == 'true' }
                 }
                 steps{
                     sshagent([params.DB_CREDENTIALS_ID]) {
