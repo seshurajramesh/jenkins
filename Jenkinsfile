@@ -33,7 +33,7 @@ pipeline{
                     sshagent([params.DB_CREDENTIALS_ID]) {
                         sh """
                             set -e
-                            ssh -o StrictHostKeyChecking=no ${params.PG_SERVICE}@${params.DB_HOST} << 'EOF'
+                            ssh -o StrictHostKeyChecking=no ${params.PG_SERVICE}@${params.DB_HOST}<<'EOF'
 set -e
 cp ${params.PG_CONF_DEST}/${env.CONF_FILENAME} ${params.PG_CONF_DEST}/backup_confs/${env.CONF_FILENAME}.\$(date +%Y%m%d_%H%M%S)
 mv /tmp/${env.CONF_FILENAME}.new ${params.PG_CONF_DEST}/${env.CONF_FILENAME}
