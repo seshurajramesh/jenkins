@@ -37,6 +37,7 @@ pipeline{
 set -e
 cp ${params.PG_CONF_DEST}/${env.CONF_FILENAME} ${params.PG_CONF_DEST}/backup_confs/${env.CONF_FILENAME}.\$(date +%Y%m%d_%H%M%S)
 mv /tmp/${env.CONF_FILENAME}.new ${params.PG_CONF_DEST}/${env.CONF_FILENAME}
+echo "File ${env.CONF_FILENAME} moved to ${params.PG_CONF_DEST}/${env.CONF_FILENAME} on ${params.DB_HOST}"
 chmod 600 ${params.PG_CONF_DEST}/${env.CONF_FILENAME}
 pg_ctl reload -D ${params.PG_CONF_DEST}
 EOF
