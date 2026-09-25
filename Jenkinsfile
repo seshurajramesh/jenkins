@@ -28,7 +28,7 @@ pipeline{
                 }
             }
 
-            stage(move the conf file from /tmp to ${params.PG_CONF_DEST}){
+            stage('move the conf file from /tmp to pgdata path and reload'){
                 steps{
                     sshagent([params.DB_CREDENTIALS_ID]) {
                         sh """
