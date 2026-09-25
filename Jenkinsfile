@@ -51,7 +51,7 @@ EOF
                     sshagent([params.DB_CREDENTIALS_ID]) {
                         script {
                             def restartNeeded = sh(script: """ssh -o StrictHostKeyChecking=no ${params.PG_SERVICE}@${params.DB_HOST} \
-                            'psql -t -A -c "select name from pg_settings where pending_restart = true;"' | wc -l""",returnStdout: true).trim()
+                            'psql -t -A -c "select name from pg_settings where pending_restart = true;" | wc -l'""",returnStdout: true).trim()
                             if (restartNeeded.toInteger() > 0) {
                                 env.RESTART_NEEDED = 'true'
                                 echo "Restart is needed on ${params.DB_HOST}"
