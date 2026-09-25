@@ -16,7 +16,7 @@ pipeline{
                     sshagent([params.DB_CREDENTIALS_ID]) {
                         sh """
                             set -e
-                            scp -o StrictHostKeyChecking=no ${env.CONF_FILENAME} ${params.DB_USER}@${params.DB_HOST}:/tmp/${env.CONF_FILENAME}.new
+                            scp -o StrictHostKeyChecking=no ${env.CONF_FILENAME} ${params.PG_SERVICE}@${params.DB_HOST}:/tmp/${env.CONF_FILENAME}.new
                         """
                     }
                 }
