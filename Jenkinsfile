@@ -22,6 +22,14 @@ pipeline{
                         sh """
                             set -e
                             scp -o StrictHostKeyChecking=no ${env.CONF_FILENAME} ${params.PG_SERVICE}@${params.DB_HOST}:/tmp/${env.CONF_FILENAME}.new
+
+                            ssh -o StrictHostKeyChecking=no ${params.PG_SERVICE}@${params.DB_HOST} << 'EOF'
+                                set -e
+                                cp ${params.PG_CONF_DEST}/${env.CONF_FILENAME} ${params.PG_CONF_DEST}/backup_confs/${env.CONF_FILENAME}.bak_$(date +%Y%m%d_%H%M%S)
+                                mv /tmp/${env.CONF_FILENAME}.new ${params.PG_CONF_DEST}/${env.CONF_FILENAME}
+                                chmod 600 ${params.PG_CONF_DEST}/${env.CONF_FILENAME}
+                                pg_ctl reload -D ${params.PG_CONF_DEST}
+                                EOF                        
                         """
                     }
                 }
