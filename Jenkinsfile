@@ -22,7 +22,17 @@ pipeline{
                         sh """
                             set -e
                             scp -o StrictHostKeyChecking=no ${env.CONF_FILENAME} ${params.PG_SERVICE}@${params.DB_HOST}:/tmp/${env.CONF_FILENAME}.new
+                            echo "File ${env.CONF_FILENAME} moved to /tmp/${env.CONF_FILENAME}.new on ${params.DB_HOST}"
+                        """
+                    }
+                }
+            }
 
+            stage(move the conf file from /tmp to ${params.PG_CONF_DEST}){
+                steps{
+                    sshagent([params.DB_CREDENTIALS_ID]) {
+                        sh """
+                            set -e
                             ssh -o StrictHostKeyChecking=no ${params.PG_SERVICE}@${params.DB_HOST} << 'EOF'
 set -e
 cp ${params.PG_CONF_DEST}/${env.CONF_FILENAME} ${params.PG_CONF_DEST}/backup_confs/${env.CONF_FILENAME}.\$(date +%Y%m%d_%H%M%S)
@@ -34,5 +44,5 @@ EOF
                     }
                 }
             }
-        }
+    }
 }
