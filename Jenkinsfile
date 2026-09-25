@@ -1,5 +1,5 @@
 pipeline{
-
+    agent any
     environment{
         RESTART_NEEDED = 'false'
         CONF_FILENAME = 'postgresql.conf'
