@@ -29,7 +29,7 @@ pipeline{
                                 mv /tmp/${env.CONF_FILENAME}.new ${params.PG_CONF_DEST}/${env.CONF_FILENAME}
                                 chmod 600 ${params.PG_CONF_DEST}/${env.CONF_FILENAME}
                                 pg_ctl reload -D ${params.PG_CONF_DEST}
-                        EOF                        
+EOF                        
                         """
                     }
                 }
